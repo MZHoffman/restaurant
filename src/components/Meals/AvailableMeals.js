@@ -1,6 +1,6 @@
 import React from 'react'
 import MealItem from './MealItem'
-import Card from '../IU/Card'
+import Card from '../UI/Card'
 
 const MEALS = [
   {
