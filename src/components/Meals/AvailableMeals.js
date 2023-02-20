@@ -19,6 +19,8 @@ const AvailableMeals = () => {
       }
       const data = await response.json()
       if (data !== null) {
+        console.log(data)
+
         setMeals(data)
       }
     } catch (error) {

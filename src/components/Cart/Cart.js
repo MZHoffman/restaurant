@@ -1,12 +1,14 @@
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 import Modal from '../UI/Modal'
+import CartOrderForm from './CartOrderForm'
 import CartItem from './CartItem'
 import classes from './Cart.module.css'
 import CartContext from '../../store/cart-context'
 
 const Cart = (props) => {
   const cartCtx = useContext(CartContext)
+  const [cartOrderFormVisibility, setCartOrderFormVisibility] = useState(false)
 
   const totalAmount = `£${cartCtx.totalAmount.toFixed(2)}`
   const hasItems = cartCtx.items.length > 0
@@ -17,6 +19,12 @@ const Cart = (props) => {
 
   const cartItemAddHandler = (item) => {
     cartCtx.addIteam({ ...item, amount: 1 })
+  }
+  const formShowHandler = () => {
+    setCartOrderFormVisibility(true)
+  }
+  const formHideHandler = () => {
+    setCartOrderFormVisibility(false)
   }
 
   const cartItems = (
@@ -33,7 +41,18 @@ const Cart = (props) => {
       ))}
     </ul>
   )
-
+  const orderActions = (
+    <div className={classes.actions}>
+      <button className={classes['button--alt']} onClick={props.hideCart}>
+        Close
+      </button>
+      {hasItems && (
+        <button className={classes.button} onClick={formShowHandler}>
+          Order
+        </button>
+      )}
+    </div>
+  )
   return (
     <Modal closeModal={props.hideCart}>
       {cartItems}
@@ -41,12 +60,12 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      <div className={classes.actions}>
-        <button className={classes['button--alt']} onClick={props.hideCart}>
-          Close
-        </button>
-        {hasItems && <button className={classes.button}>Order</button>}
+      <div>
+        {cartOrderFormVisibility && (
+          <CartOrderForm order={cartCtx} formHideHandler={formHideHandler} />
+        )}
       </div>
+      {!cartOrderFormVisibility && orderActions}
     </Modal>
   )
 }
