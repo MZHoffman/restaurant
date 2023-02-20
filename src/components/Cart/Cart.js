@@ -27,6 +27,23 @@ const Cart = (props) => {
     setCartOrderFormVisibility(false)
   }
 
+  const orderSubmitHandler = (userInfo) => {
+    const order = JSON.stringify({
+      userInfo: userInfo,
+      orderItems: cartCtx.items,
+      orderTotal: cartCtx.totalAmount,
+    })
+    fetch(
+      'https://restaurant-46faa-default-rtdb.europe-west1.firebasedatabase.app/orders.json',
+      {
+        method: 'POST',
+        body: order,
+      }
+    )
+
+    console.log(order)
+  }
+
   const cartItems = (
     <ul className={classes['cart-items']}>
       {cartCtx.items.map((item) => (
@@ -62,7 +79,10 @@ const Cart = (props) => {
       </div>
       <div>
         {cartOrderFormVisibility && (
-          <CartOrderForm order={cartCtx} formHideHandler={formHideHandler} />
+          <CartOrderForm
+            orderSubmitHandler={orderSubmitHandler}
+            formHideHandler={formHideHandler}
+          />
         )}
       </div>
       {!cartOrderFormVisibility && orderActions}

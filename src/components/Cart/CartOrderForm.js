@@ -38,8 +38,19 @@ const CartOrderForm = (props) => {
       city: cityValid,
     })
 
-    console.log(isFormValid)
-    //props.formHideHandler()
+    if (!isFormValid) {
+      return
+    }
+    const userInfo = {
+      name: enteredName,
+      street: enteredStreet,
+      postcode: enteredPostcode,
+      city: enteredCity,
+    }
+    console.log('BOOM')
+
+    props.orderSubmitHandler(userInfo)
+    props.formHideHandler()
   }
   const nameControlClasses = `${classes.control} ${
     formValidity.name ? '' : classes.invalid
