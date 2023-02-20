@@ -3,7 +3,7 @@
   justify-content: space-between;
   margin: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid rgb(204, 204, 204);
+  border-bottom: 1px solid #ccc;
 }
 
 .meal h3 {
@@ -17,6 +17,6 @@
 .price {
   margin-top: 0.25rem;
   font-weight: bold;
-  color: #0dad02;
+  color: #02ad02;
   font-size: 1.25rem;
 }
