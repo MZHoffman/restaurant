@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react'
-import Input from '../UI/Input'
 
 import classes from './CartOrderForm.module.css'
 
@@ -50,7 +49,7 @@ const CartOrderForm = (props) => {
     console.log('BOOM')
 
     props.orderSubmitHandler(userInfo)
-    props.formHideHandler()
+    // props.formHideHandler()
   }
   const nameControlClasses = `${classes.control} ${
     formValidity.name ? '' : classes.invalid

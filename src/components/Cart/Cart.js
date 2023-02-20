@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import React, { useContext, useState, Fragment } from 'react'
 
 import Modal from '../UI/Modal'
 import CartOrderForm from './CartOrderForm'
@@ -9,7 +9,8 @@ import CartContext from '../../store/cart-context'
 const Cart = (props) => {
   const cartCtx = useContext(CartContext)
   const [cartOrderFormVisibility, setCartOrderFormVisibility] = useState(false)
-
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
   const totalAmount = `£${cartCtx.totalAmount.toFixed(2)}`
   const hasItems = cartCtx.items.length > 0
 
@@ -27,21 +28,23 @@ const Cart = (props) => {
     setCartOrderFormVisibility(false)
   }
 
-  const orderSubmitHandler = (userInfo) => {
+  const orderSubmitHandler = async (userInfo) => {
+    setSubmitting(true)
     const order = JSON.stringify({
       userInfo: userInfo,
       orderItems: cartCtx.items,
       orderTotal: cartCtx.totalAmount,
     })
-    fetch(
+    await fetch(
       'https://restaurant-46faa-default-rtdb.europe-west1.firebasedatabase.app/orders.json',
       {
         method: 'POST',
         body: order,
       }
     )
-
-    console.log(order)
+    //await new Promise((resolve) => setTimeout(resolve, 1500))
+    setSubmitting(false)
+    setSubmitted(true)
   }
 
   const cartItems = (
@@ -70,8 +73,8 @@ const Cart = (props) => {
       )}
     </div>
   )
-  return (
-    <Modal closeModal={props.hideCart}>
+  const cartModalEdit = (
+    <Fragment>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
@@ -86,6 +89,25 @@ const Cart = (props) => {
         )}
       </div>
       {!cartOrderFormVisibility && orderActions}
+    </Fragment>
+  )
+  const cartModalSubmitting = <p>Submitting!</p>
+  const cartModalSubmitted = (
+    <Fragment>
+      <p>Your order is on its way!</p>
+      <div className={classes.actions}>
+        <button className={classes.button} onClick={props.hideCart}>
+          Close
+        </button>
+      </div>
+    </Fragment>
+  )
+
+  return (
+    <Modal closeModal={props.hideCart}>
+      {!submitting && !submitted && cartModalEdit}
+      {submitting && cartModalSubmitting}
+      {!submitting && submitted && cartModalSubmitted}
     </Modal>
   )
 }
