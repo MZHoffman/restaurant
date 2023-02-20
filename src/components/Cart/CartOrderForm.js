@@ -1,9 +1,16 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Input from '../UI/Input'
 
 import classes from './CartOrderForm.module.css'
 
 const CartOrderForm = (props) => {
+  const [formValidity, setFormValidity] = useState({
+    name: true,
+    street: true,
+    postcode: true,
+    city: true,
+  })
+
   const nameRef = useRef()
   const streetRef = useRef()
   const postcodeRef = useRef()
@@ -24,27 +31,49 @@ const CartOrderForm = (props) => {
     )
     const isFormValid = nameValid && streetValid && cityValid && postcodeValid
 
-    console.log(isFormValid)
-    props.formHideHandler()
-  }
+    setFormValidity({
+      name: nameValid,
+      street: streetValid,
+      postcode: postcodeValid,
+      city: cityValid,
+    })
 
+    console.log(isFormValid)
+    //props.formHideHandler()
+  }
+  const nameControlClasses = `${classes.control} ${
+    formValidity.name ? '' : classes.invalid
+  }`
+  const streetControlClasses = `${classes.control} ${
+    formValidity.street ? '' : classes.invalid
+  }`
+  const postcodeControlClasses = `${classes.control} ${
+    formValidity.postcode ? '' : classes.invalid
+  }`
+  const cityControlClasses = `${classes.control} ${
+    formValidity.city ? '' : classes.invalid
+  }`
   return (
     <form className={classes.form} onSubmit={orderHandler}>
-      <div className={classes.control}>
+      <div className={nameControlClasses}>
         <label htmlFor='name'>Name</label>
         <input ref={nameRef} type='text' id='name' />
+        {!formValidity.name && <p>Please enter valid Name</p>}
       </div>
-      <div className={classes.control}>
+      <div className={streetControlClasses}>
         <label htmlFor='street'>Street</label>
         <input ref={streetRef} type='text' id='street' />
+        {!formValidity.street && <p>Please enter valid street</p>}
       </div>
-      <div className={classes.control}>
+      <div className={postcodeControlClasses}>
         <label htmlFor='postcode'>Postcode</label>
         <input ref={postcodeRef} type='text' id='postcode' />
+        {!formValidity.postcode && <p>Please enter valid postcode</p>}
       </div>
-      <div className={classes.control}>
+      <div className={cityControlClasses}>
         <label htmlFor='city'>City</label>
         <input ref={cityRef} type='text' id='city' />
+        {!formValidity.city && <p>Please enter valid City</p>}
       </div>
       <div className={classes.actions}>
         <button className={classes.submit}>Confirm order</button>
