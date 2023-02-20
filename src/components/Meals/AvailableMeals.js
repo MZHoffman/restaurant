@@ -3,9 +3,9 @@ import MealItem from './MealItem'
 import Card from '../UI/Card'
 
 const AvailableMeals = () => {
+  const [meals, setMeals] = useState([])
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [meals, setMeals] = useState([])
 
   const fetchMeals = useCallback(async () => {
     setIsLoading(true)
@@ -18,7 +18,9 @@ const AvailableMeals = () => {
         throw new Error('Something went wrong!')
       }
       const data = await response.json()
-      setMeals(data)
+      if (data !== null) {
+        setMeals(data)
+      }
     } catch (error) {
       setError(error.message)
     }
@@ -27,21 +29,35 @@ const AvailableMeals = () => {
   useEffect(() => {
     fetchMeals()
   }, [fetchMeals])
+
+  let content = <p>No meals found</p>
+
+  if (error) {
+    content = <p>{error}</p>
+  }
+  if (isLoading) {
+    content = <p>{isLoading}</p>
+  }
+
+  if (meals.length > 0) {
+    content = (
+      <ul>
+        {meals.map((meal) => (
+          <MealItem
+            name={meal.name}
+            price={meal.price}
+            description={meal.description}
+            id={meal.id}
+            key={meal.id}
+          />
+        ))}
+      </ul>
+    )
+  }
+
   return (
     <React.Fragment>
-      <Card>
-        <ul>
-          {meals.map((meal) => (
-            <MealItem
-              name={meal.name}
-              price={meal.price}
-              description={meal.description}
-              id={meal.id}
-              key={meal.id}
-            />
-          ))}
-        </ul>
-      </Card>
+      <Card>{content}</Card>
     </React.Fragment>
   )
 }
