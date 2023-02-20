@@ -16,7 +16,6 @@ function App() {
   return (
     <CartProvider>
       {cartVisibility && <Cart hideCart={hideCart} />}
-      console.log({!cartVisibility || <Cart hideCart={hideCart} />});
       <Header showCart={showCart} />
       <main>
         <Meals />
