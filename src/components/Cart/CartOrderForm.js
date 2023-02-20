@@ -11,7 +11,20 @@ const CartOrderForm = (props) => {
 
   const orderHandler = (event) => {
     event.preventDefault()
+    const enteredName = nameRef.current.value
+    const enteredStreet = streetRef.current.value
+    const enteredPostcode = postcodeRef.current.value
+    const enteredCity = cityRef.current.value
 
+    const nameValid = enteredName.trim() !== ''
+    const streetValid = enteredStreet.trim() !== ''
+    const cityValid = enteredCity.trim() !== ''
+    const postcodeValid = /[A-Z]{1,2}[0-9]{1,2} ?[0-9][A-Z]{2}/i.test(
+      enteredPostcode
+    )
+    const isFormValid = nameValid && streetValid && cityValid && postcodeValid
+
+    console.log(isFormValid)
     props.formHideHandler()
   }
 
@@ -34,7 +47,7 @@ const CartOrderForm = (props) => {
         <input ref={cityRef} type='text' id='city' />
       </div>
       <div className={classes.actions}>
-        <button>Confirm order</button>
+        <button className={classes.submit}>Confirm order</button>
         <button type='button' onClick={props.formHideHandler}>
           Cancel
         </button>
