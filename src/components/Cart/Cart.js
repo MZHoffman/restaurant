@@ -45,6 +45,7 @@ const Cart = (props) => {
     //await new Promise((resolve) => setTimeout(resolve, 1500))
     setSubmitting(false)
     setSubmitted(true)
+    cartCtx.clearCart()
   }
 
   const cartItems = (
